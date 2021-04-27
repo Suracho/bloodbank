@@ -8,21 +8,23 @@
 </head>
 <body>
     <div class="login">
-        <input type="text" placeholder="Username" id="username">  
-      <input type="password" placeholder="password" id="password"> 
+        
+      <form action="/registration" method="post">
+        <input type="text" placeholder="Username" id="username" name="username">  
+        <input type="password" placeholder="password" id="password" name="password"> 
         Blood Group   <select name="bloodgroup" id="bloodgroup">
-          <option value="A+">A+</option>
-          <option value="A+">A-</option>
-          <option value="A+">B+</option>
-          <option value="A+">B-</option>
-          <option value="A+">AB+</option>
-          <option value="A+">AB-</option>
-          <option value="A+">O+</option>
-          <option value="A+">O-</option>
+          <option value="A+" name="A+">A+</option>
+          <option value="A-" name="A-">A-</option>
+          <option value="B+" name="B+">B+</option>
+          <option value="B-" name="B-">B-</option>
+          <option value="AB+" name="AB+">AB+</option>
+          <option value="AB-" name="AB-">AB-</option>
+          <option value="O+" name="O+">O+</option>
+          <option value="O-" name="O-">O-</option>
       </select>
-      <input type="submit" value="Sign In">
-      <p></p>
-      <a href="login.html" id="registration">Already Registered? Please login</a>
+      <button type="submit">Register</button>
+      </form>
+      <a href="/login" id="registration">Already Registered? Please login</a>
     </div>
     <div class="shadow"></div>
     

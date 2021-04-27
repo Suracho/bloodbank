@@ -8,11 +8,13 @@
 </head>
 <body>
     <div class="login">
-        <input type="text" placeholder="Username" id="username">  
-      <input type="password" placeholder="password" id="password">  
-      <input type="submit" value="Sign In">
+        <form action="/login" method="post">
+        <input type="text" placeholder="Username" id="username" name="username" required>  
+      <input type="password" placeholder="password" id="password" name="password" required>  
+      <button type="submit">login</button>
       <p></p>
       <a href="/registration" id="registration">New Here?Please Register</a>
+        </form>
     </div>
     <div class="shadow"></div>
 </body>
