@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const User = require('./models/user');
+const alert = require('alert');
+const { request } = require('express');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -27,45 +29,96 @@ app.get('/',(req, res)=> {
 });
 
 app.get('/login',(req, res)=> {
- res.render('login');   
+    res.render('login');   
 });
 
 app.post('/login',(req , res)=>{
     console.log(req.body);
+    let {username,password} = req.body;
+    username = username.trim();
+    password = password.trim();
+    
+        User.find({username})
+        .then((data)=>{
+            if(data[0].password==password){
+                console.log('logged in')
+                res.redirect('/main');
+            }else{
+                res.json({
+                    status : "failed",
+                    message : "Wrong credentials entered",
+                     err
+                })
+            }
+        })
+        .catch((err)=>{
+            res.json({
+                status : "failed",
+                message : "failed to retrieve data from cloud",
+                 err
+            })
+        })
+    
+
 });
 
 app.get('/registration',(req, res)=> {
-   
-    res.render('registration');   
+   res.render('registration');   
 });
 
 app.post('/registration',(req , res)=>{
-    const user = new User(req.body);
-
-    user.save()
-    .then((result)=>{
-        res.redirect('/login');
+    let {username,password,bloodgroup} = req.body;
+    User.find({username})
+    .then((data)=>{
+        if(data.length){
+            res.json({
+                status : "failed",
+                message : "Username already exists",
+                 err
+            });
+        } else{
+        const user = new User(req.body);
+        user.save()
+            .then((result)=>{
+            res.redirect('/login');
+        })
+            .catch((err)=>{
+            res.json({
+                status : "failed",
+                message : "Failure while commiting inside the database",
+                err
+            });
+        })
+        }
     })
     .catch((err)=>{
-        console.log(err);
+        res.json({
+            status : "failed",
+            message : "error while fetching details ",
+             err
+        });
     })
+    
 });
 
-app.get('/adduser',(req,res)=>{
-    const user = new User({
-        username : "butter",
-        password : "butter123",
-        bloodgroup: "O+ve"
-    });
-
-    user.save()
-    .then((result)=>{
-        res.send(result);
-    })
-    .catch((err)=>{
-        console.log(err);
-    })
+app.get('/main',(req , res)=>{
+    res.render('main');
 });
+// app.get('/adduser',(req,res)=>{
+//     const user = new User({
+//         username : "butter",
+//         password : "butter123",
+//         bloodgroup: "O+ve"
+//     });
+
+//     user.save()
+//     .then((result)=>{
+//         res.send(result);
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//     })
+// });
 
 app.use((req,res)=>{
     res.status(404).render('404');
