@@ -8,6 +8,11 @@ const { request } = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 
+//deprecations
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
 
 const dbUri = 'mongodb+srv://butter:butter123@bloodbank.wits5.mongodb.net/bloodbank?retryWrites=true&w=majority';
 mongoose.connect(dbUri, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -41,7 +46,13 @@ app.post('/login',(req , res)=>{
         User.find({username})
         .then((data)=>{
             if(data[0].password==password){
-                console.log('logged in')
+                const user = User.findOneAndUpdate({username:username},{login : true},{returnNewDocument: true})
+                .then((data)=>{
+                    console.log(data);
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
                 res.redirect('/main');
             }else{
                 res.json({
@@ -58,8 +69,8 @@ app.post('/login',(req , res)=>{
                  err
             })
         })
-    
 
+        
 });
 
 app.get('/registration',(req, res)=> {
