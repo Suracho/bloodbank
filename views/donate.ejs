@@ -1,0 +1,22 @@
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="blogs content">
+            <h2>All Hospitals</h2>
+
+            <% if (hospitals.length > 0) { %>
+                <% hospitals.forEach(hospital =>{%>
+                    <a class = "single" href="/donate/<%= hospital._id %> "><h3 class="title"><%= hospital.name %></h3></a>
+                    
+                    <p class="snippet"><%= hospital.address %></p>
+                    <p class="snippet">Phone:<%= hospital.phone %></p>
+                    <p class="snippet">Blood group <%= blood %>:<%= hospital[blood] %> litres</p>
+                <% }) %>
+            <% } %> 
+        </div>
+
+        <%- include("./partials/footer.ejs") %>
+    </body>    
+</html>

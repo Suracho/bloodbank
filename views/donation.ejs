@@ -1,0 +1,20 @@
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="details content">
+            <h2><%= hospital.name %></h2>
+            <div class="content">
+              <p><%= hospital.address %></p>
+              <p><%= hospital.phone %></p>
+              <p >Blood group <%= blood %>:<%= hospital[blood] %> litres</p>
+              <p>How much blood did you donate this time?</p>
+              <input type="number" name="donate" id="donate" max="5" min="1">
+            </div>
+          </div>
+          
+        <%- include("./partials/footer.ejs") %>
+    </body>    
+</html>
+

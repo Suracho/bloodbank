@@ -4,10 +4,12 @@ const mongoose = require('mongoose');
 const User = require('./models/user');
 const Hospital = require('./models/hospital')
 const { request } = require('express');
+const { render } = require('ejs');
 
 const app = express();
 const port = process.env.PORT || 3000;
 var loggedinuser;
+var blood;
 
 //deprecations
 mongoose.set('useNewUrlParser', true);
@@ -135,7 +137,7 @@ app.get('/logout',(req,res)=>{
 })
 
 app.get('/bloodbank',(req,res)=>{
-    var blood;
+    
     User.find({login:true, username : loggedinuser})
     .then((data)=>{
          blood = data[0].bloodgroup
@@ -157,6 +159,43 @@ app.get('/bloodbank',(req,res)=>{
         })
     })
     
+})
+
+app.get('/donate',(req,res)=>{
+    User.find({login:true, username : loggedinuser})
+    .then((data)=>{
+         blood = data[0].bloodgroup
+         Hospital.find()
+            .then((data)=>{
+                res.render('donate',{hospitals : data, blood : blood});
+            })
+            .catch((err)=>{
+                res.json({
+                    status : "failed",
+                    message : "failed to retrieve hospital data"
+                })
+            })
+            })
+    .catch((err)=>{
+        res.json({
+            status : "failed",
+            message : "failure in finding the bloodgroup"
+        })
+    })
+})
+app.get('/donate/:id',(req,res)=>{
+    
+    const id = req.params.id;
+    Hospital.findById(id)
+        .then((result)=>{
+            res.render('donation',{hospital : result, blood : blood})
+        })
+        .catch((err)=>{
+            res.json({
+                status : "failure",
+                message : "error in retrieving hospital details"
+            })
+        })
 })
 
 app.use((req,res)=>{

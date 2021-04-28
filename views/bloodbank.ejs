@@ -8,10 +8,11 @@
 
             <% if (hospitals.length > 0) { %>
                 <% hospitals.forEach(hospital =>{%>
-                    <h3 class="title"><%= hospital.name %></h3>
+                    <a class = "single" href="/bloodbank/<%= hospital._id %> "><h3 class="title"><%= hospital.name %></h3></a>
+                    
                     <p class="snippet"><%= hospital.address %></p>
                     <p class="snippet">Phone:<%= hospital.phone %></p>
-                    <p class="snippet">Blood group <%= blood %>:<%= hospital[blood] %></p>
+                    <p class="snippet">Blood group A+ve:<%= hospital.Apositive %> litres | Blood group A-ve:<%= hospital.Anegative %> litres | Blood group B+ve:<%= hospital.Bpositive %> litres | Blood group B-ve:<%= hospital.Bnegative %> litres | Blood group O+ve:<%= hospital.Opositive %> litres | Blood group O-ve:<%= hospital.Onegative %> litresBlood group AB+ve:<%= hospital.ABpositive %> litres | Blood group AB-ve:<%= hospital.ABnegative %> litres remaining</p>
                 <% }) %>
             <% } %> 
         </div>
