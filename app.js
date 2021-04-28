@@ -7,6 +7,7 @@ const { request } = require('express');
 
 const app = express();
 const port = process.env.PORT || 3000;
+var loggedinuser;
 
 //deprecations
 mongoose.set('useNewUrlParser', true);
@@ -110,6 +111,7 @@ app.post('/registration',(req , res)=>{
 app.get('/main',(req , res)=>{
     User.find({login:true})
     .then((data)=>{
+        loggedinuser = data[0].username
         res.render('main',{username : data[0].username})
     })
     .catch((err)=>{
@@ -121,7 +123,7 @@ app.get('/main',(req , res)=>{
 });
 
 app.get('/logout',(req,res)=>{
-    User.findOneAndUpdate({login:true},{login : false},{returnOriginal:false})
+    User.findOneAndUpdate({login:true, username : loggedinuser},{login : false},{returnOriginal:false})
                 .then((data)=>{
                     console.log(data);
                     res.redirect('/login');
@@ -133,16 +135,28 @@ app.get('/logout',(req,res)=>{
 })
 
 app.get('/bloodbank',(req,res)=>{
-    Hospital.find()
+    var blood;
+    User.find({login:true, username : loggedinuser})
     .then((data)=>{
-        res.render('bloodbank',{hospitals : data});
-    })
+         blood = data[0].bloodgroup
+         Hospital.find()
+            .then((data)=>{
+                res.render('bloodbank',{hospitals : data, blood : blood});
+            })
+            .catch((err)=>{
+                res.json({
+                    status : "failed",
+                    message : "failed to retrieve hospital data"
+                })
+            })
+            })
     .catch((err)=>{
         res.json({
             status : "failed",
-            message : "failed to retrieve data"
+            message : "failure in finding the bloodgroup"
         })
     })
+    
 })
 
 app.use((req,res)=>{

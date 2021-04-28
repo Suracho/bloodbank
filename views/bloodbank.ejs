@@ -11,6 +11,7 @@
                     <h3 class="title"><%= hospital.name %></h3>
                     <p class="snippet"><%= hospital.address %></p>
                     <p class="snippet">Phone:<%= hospital.phone %></p>
+                    <p class="snippet">Blood group <%= blood %>:<%= hospital[blood] %></p>
                 <% }) %>
             <% } %> 
         </div>
