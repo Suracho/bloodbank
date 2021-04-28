@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const User = require('./models/user');
-const alert = require('alert');
+const Hospital = require('./models/hospital')
 const { request } = require('express');
 
 const app = express();
@@ -13,6 +13,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('debug',true)
 
 const dbUri = 'mongodb+srv://butter:butter123@bloodbank.wits5.mongodb.net/bloodbank?retryWrites=true&w=majority';
 mongoose.connect(dbUri, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -38,39 +39,33 @@ app.get('/login',(req, res)=> {
 });
 
 app.post('/login',(req , res)=>{
-    console.log(req.body);
     let {username,password} = req.body;
     username = username.trim();
     password = password.trim();
     
-        User.find({username})
+        User.findOne({username})
         .then((data)=>{
-            if(data[0].password==password){
-                const user = User.findOneAndUpdate({username:username},{login : true},{returnNewDocument: true})
-                .then((data)=>{
-                    console.log(data);
+            if(data.password==password){
+                User.findOneAndUpdate({username:username},{login : true},{returnOriginal : false},(err,data)=>{
+                    if(err){
+                        console.log(err);
+                        res.json({
+                            status : "failed",
+                            message : "failed to retrieve data from cloud",
+                             err
+                        })
+                    }
+                    console.log(data)
+                    res.redirect('/main');
                 })
-                .catch((err)=>{
-                    console.log(err);
-                })
-                res.redirect('/main');
-            }else{
-                res.json({
-                    status : "failed",
-                    message : "Wrong credentials entered",
-                     err
-                })
-            }
-        })
+                }})
         .catch((err)=>{
             res.json({
                 status : "failed",
-                message : "failed to retrieve data from cloud",
+                message : "Wrong credentials entered",
                  err
             })
         })
-
-        
 });
 
 app.get('/registration',(req, res)=> {
@@ -113,23 +108,29 @@ app.post('/registration',(req , res)=>{
 });
 
 app.get('/main',(req , res)=>{
-    res.render('main');
+    User.find({login:true})
+    .then((data)=>{
+        res.render('main',{username : data[0].username})
+    })
+    .catch((err)=>{
+        res.json({
+            status : "failed",
+            message : "you need to login first"
+        })
+    })
 });
-// app.get('/adduser',(req,res)=>{
-//     const user = new User({
-//         username : "butter",
-//         password : "butter123",
-//         bloodgroup: "O+ve"
-//     });
 
-//     user.save()
-//     .then((result)=>{
-//         res.send(result);
-//     })
-//     .catch((err)=>{
-//         console.log(err);
-//     })
-// });
+app.get('/logout',(req,res)=>{
+    User.findOneAndUpdate({login:true},{login : false},{returnOriginal:false})
+                .then((data)=>{
+                    console.log(data);
+                    res.redirect('/login');
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+                
+})
 
 app.use((req,res)=>{
     res.status(404).render('404');
