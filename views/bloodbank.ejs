@@ -1,0 +1,21 @@
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="blogs content">
+            <h2>All Hospitals</h2>
+
+            <% if (hospitals.length > 0) { %>
+                <% hospitals.forEach(hospital =>{%>
+                    <h3 class="title"><%= hospital.name %></h3>
+                    <p class="snippet"><%= hospital.address %></p>
+                    <p class="snippet">Phone:<%= hospital.phone %></p>
+                <% }) %>
+            <% } %> 
+        </div>
+
+        <%- include("./partials/footer.ejs") %>
+    </body>    
+</html>
+

@@ -132,6 +132,19 @@ app.get('/logout',(req,res)=>{
                 
 })
 
+app.get('/bloodbank',(req,res)=>{
+    Hospital.find()
+    .then((data)=>{
+        res.render('bloodbank',{hospitals : data});
+    })
+    .catch((err)=>{
+        res.json({
+            status : "failed",
+            message : "failed to retrieve data"
+        })
+    })
+})
+
 app.use((req,res)=>{
     res.status(404).render('404');
 });
