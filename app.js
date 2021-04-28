@@ -161,6 +161,20 @@ app.get('/bloodbank',(req,res)=>{
     
 })
 
+app.get('/bloodbank/:id',(req,res)=>{
+    const id = req.params.id;
+    Hospital.findById(id)
+        .then((result)=>{
+            res.render('bloodbankdet',{hospital : result, blood : blood})
+        })
+        .catch((err)=>{
+            res.json({
+                status : "failure",
+                message : "error in retrieving hospital details"
+            })
+        })
+})
+
 app.get('/donate',(req,res)=>{
     User.find({login:true, username : loggedinuser})
     .then((data)=>{

@@ -1,0 +1,65 @@
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="blogs content">
+
+            
+                
+        <a class = "single" href="/bloodbank/<%= hospital._id %> "><h3 class="title"><%= hospital.name %></h3></a>
+                    
+        <p class="snippet"><%= hospital.address %></p>
+        <p class="snippet">Phone:<%= hospital.phone %></p>
+    
+        <table id="count">
+            <tr>
+                <th>Blood Group</th>
+                <th>Availability</th>
+            </tr>
+            <tr>
+            <td>A+ve</td>
+            <td><%= hospital.Apositive %></td>
+            </tr>
+            </tr>
+            <tr>
+            <td>A-ve</td>
+            <td><%= hospital.Anegative %></td>
+            </tr>
+    
+            <tr>
+            <td>Ab+ve</td>
+            <td><%= hospital.ABpositive %></td>
+            </tr>
+            <tr>
+            <td>AB-ve</td>
+            <td><%= hospital.ABnegative %></td>
+            </tr>
+
+            <tr>
+            <td>O+ve</td>
+            <td><%= hospital.Opositive %></td>
+            </tr>
+
+            <tr>
+            <td>O-ve</td>
+            <td><%= hospital.Onegative %></td>
+            </tr>
+
+            <tr>
+            <td>B+ve</td>
+            <td><%= hospital.Bpositive %></td>
+            </tr>
+
+            <tr>
+            <td>B-ve</td>
+            <td><%= hospital.Bnegative %></td>
+            </tr>
+        </table>
+                
+           
+        </div>
+        <%- include("./partials/footer.ejs") %>
+    </body>    
+</html>
+
