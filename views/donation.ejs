@@ -10,11 +10,26 @@
               <p><%= hospital.phone %></p>
               <p >Blood group <%= blood %>:<%= hospital[blood] %> litres</p>
               <p>How much blood did you donate this time?</p>
-              <input type="number" name="donate" id="donate" max="5" min="1">
+              <form action="/donate/<%= hospital._id %> " method="post">
+                <input type="number" name="donate" id="donate" max="5" min="1">
+                <button type="submit" id="donatebutton" >Donate</button>
+              
+              </form>
+              <p id = "Thanks" style="color:crimson;" hidden> Thanks for donating today! Unfortunately you can only donate this much today. Do visit us again! </p>
             </div>
           </div>
           
         <%- include("./partials/footer.ejs") %>
-    </body>    
+    </body>   
+    <script>
+      const submit = document.getElementById('donatebutton');
+      const inp = document.getElementById('donate');
+      const thanks = document.getElementById('Thanks');
+      submit.addEventListener('click',()=>{
+      submit.style.visibility = 'hidden';
+      inp.style.visibility = 'hidden';
+      thanks.removeAttribute("hidden");
+      })
+    </script>
 </html>
 

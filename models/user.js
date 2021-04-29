@@ -17,6 +17,14 @@ const userSchema = new Schema({
     login : {
         type : Boolean,
         default : false
+    },
+    didDonate : {
+        type : Boolean,
+        default : false
+    },
+    didReceive : {
+        type : Boolean,
+        default : false
     }
 },{timestamps : true});
 

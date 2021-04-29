@@ -125,7 +125,7 @@ app.get('/main',(req , res)=>{
 });
 
 app.get('/logout',(req,res)=>{
-    User.findOneAndUpdate({login:true, username : loggedinuser},{login : false},{returnOriginal:false})
+    User.findOneAndUpdate({login:true, username : loggedinuser},{login : false,didDonate : false, didReceive : false},{returnOriginal:false})
                 .then((data)=>{
                     console.log(data);
                     res.redirect('/login');
@@ -198,19 +198,224 @@ app.get('/donate',(req,res)=>{
     })
 })
 app.get('/donate/:id',(req,res)=>{
-    
     const id = req.params.id;
+    User.findOne({username : loggedinuser,didDonate: true})
+        .then((result)=>{
+            if(result==null){
+                Hospital.findById(id)
+                    .then((result)=>{
+                        res.render('donation',{hospital : result, blood : blood})
+                    })
+                    .catch((err)=>{
+                        res.json({
+                            status : "failure",
+                            message : "error in retrieving hospital details"
+                        })
+                    })
+            }else{
+                Hospital.findById(id)
+                    .then((result)=>{
+                        res.render('donated',{hospital : result, blood : blood})
+                    })
+                    .catch((err)=>{
+                        res.json({
+                            status : "failure",
+                            message : "error in retrieving hospital details"
+                        })
+                    })
+            }
+            })
+        .catch((err)=>{
+                console.log(err)
+        })
+})
+
+
+app.post('/donate/:id',(req,res)=>{
+    let number = req.body.donate
+    const id = req.params.id
     Hospital.findById(id)
         .then((result)=>{
-            res.render('donation',{hospital : result, blood : blood})
-        })
+            const bloodgroupe = parseInt(number) + parseInt(result[blood])
+            switch(blood){
+                case 'Apositive':
+                    Hospital.findByIdAndUpdate(id,{Apositive:bloodgroupe},{returnOriginal : false})
+                        .then((result)=>{
+                            console.log("updated")
+                            User.findOneAndUpdate({username:loggedinuser},{didDonate:true},{returnOriginal : false})
+                                .then((result)=>{
+                                    res.redirect('/donate')
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status: "failed",
+                                        message : "couldnt update donation boolean"
+                                    })
+                                })
+                            })
+                        .catch((err)=>{
+                            res.json({
+                                status: "failed",
+                                message : "couldnt update the blood"
+                            })
+                        })
+                case 'Anegative':
+                    Hospital.findByIdAndUpdate(id,{Anegative:bloodgroupe},{returnOriginal : false})
+                        .then((result)=>{
+                            console.log("updated")
+                            User.findOneAndUpdate({username:loggedinuser},{didDonate:true},{returnOriginal : false})
+                                .then((result)=>{
+                                    res.redirect('/donate')
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status: "failed",
+                                        message : "couldnt update donation boolean"
+                                    })
+                                })
+                            })
+                        .catch((err)=>{
+                            res.json({
+                                status: "failed",
+                                message : "couldnt update the blood"
+                            })
+                        })
+                case 'Bpositive':
+                    Hospital.findByIdAndUpdate(id,{Bpositive:bloodgroupe,didDonate:true},{returnOriginal : false})
+                        .then((result)=>{
+                            console.log("updated")
+                            User.findOneAndUpdate({username:loggedinuser},{didDonate:true},{returnOriginal : false})
+                                .then((result)=>{
+                                    res.redirect('/donate')
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status: "failed",
+                                        message : "couldnt update donation boolean"
+                                    })
+                                })
+                            })
+                        .catch((err)=>{
+                            res.json({
+                                status: "failed",
+                                message : "couldnt update the blood"
+                            })
+                        })
+                case 'Bnegative':
+                    Hospital.findByIdAndUpdate(id,{Bnegative:bloodgroupe,didDonate:true},{returnOriginal : false})
+                        .then((result)=>{
+                            console.log("updated")
+                            User.findOneAndUpdate({username:loggedinuser},{didDonate:true},{returnOriginal : false})
+                                .then((result)=>{
+                                    res.redirect('/donate')
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status: "failed",
+                                        message : "couldnt update donation boolean"
+                                    })
+                                })
+                            })
+                        .catch((err)=>{
+                            res.json({
+                                status: "failed",
+                                message : "couldnt update the blood"
+                            })
+                        })
+                case 'ABpositive':
+                    Hospital.findByIdAndUpdate(id,{ABpositive:bloodgroupe,didDonate:true},{returnOriginal : false})
+                        .then((result)=>{
+                            console.log("updated")
+                            User.findOneAndUpdate({username:loggedinuser},{didDonate:true},{returnOriginal : false})
+                                .then((result)=>{
+                                    res.redirect('/donate')
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status: "failed",
+                                        message : "couldnt update donation boolean"
+                                    })
+                                })
+                            })
+                        .catch((err)=>{
+                            res.json({
+                                status: "failed",
+                                message : "couldnt update the blood"
+                            })
+                        })
+                case 'ABnegative':
+                    Hospital.findByIdAndUpdate(id,{ABnegative:bloodgroupe,didDonate:true},{returnOriginal : false})
+                        .then((result)=>{
+                            console.log("updated")
+                            User.findOneAndUpdate({username:loggedinuser},{didDonate:true},{returnOriginal : false})
+                                .then((result)=>{
+                                    res.redirect('/donate')
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status: "failed",
+                                        message : "couldnt update donation boolean"
+                                    })
+                                })
+                            })
+                        .catch((err)=>{
+                            res.json({
+                                status: "failed",
+                                message : "couldnt update the blood"
+                            })
+                        })
+                case 'Opositive':
+                    Hospital.findByIdAndUpdate(id,{Opositive:bloodgroupe,didDonate:true},{returnOriginal : false})
+                        .then((result)=>{
+                            console.log("updated")
+                            User.findOneAndUpdate({username:loggedinuser},{didDonate:true},{returnOriginal : false})
+                                .then((result)=>{
+                                    res.redirect('/donate')
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status: "failed",
+                                        message : "couldnt update donation boolean"
+                                    })
+                                })
+                            })
+                        .catch((err)=>{
+                            res.json({
+                                status: "failed",
+                                message : "couldnt update the blood"
+                            })
+                        })
+                case 'Onegative':
+                    Hospital.findByIdAndUpdate(id,{Onegative:bloodgroupe,didDonate:true},{returnOriginal : false})
+                        .then((result)=>{
+                            console.log("updated")
+                            User.findOneAndUpdate({username:loggedinuser},{didDonate:true},{returnOriginal : false})
+                                .then((result)=>{
+                                    res.redirect('/donate')
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status: "failed",
+                                        message : "couldnt update donation boolean"
+                                    })
+                                })
+                            })
+                        .catch((err)=>{
+                            res.json({
+                                status: "failed",
+                                message : "couldnt update the blood"
+                            })
+                        })
+            }
+        })    
         .catch((err)=>{
             res.json({
-                status : "failure",
-                message : "error in retrieving hospital details"
+                status : "failed",
+                message : "failed to find hospital"
             })
         })
 })
+
 
 app.use((req,res)=>{
     res.status(404).render('404');
