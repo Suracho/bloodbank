@@ -1,0 +1,33 @@
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="details content">
+            <h2><%= hospital.name %></h2>
+            <div class="content">
+              <p><%= hospital.address %></p>
+              <p><%= hospital.phone %></p>
+              <p >Blood group <%= blood %>:<%= hospital[blood] %> litres</p>
+              <form action="/receive/<%= hospital._id %> " method="post">
+                <input type="number" name="donate" id="donate" max="5" min="1">
+                <button type="submit" id="donatebutton" >Receive</button>
+              
+              </form>
+              <p id = "Thanks" style="color:crimson;" hidden> We hope you got enough blood! We are happy to serve you again </p>
+            </div>
+          </div>
+          
+        <%- include("./partials/footer.ejs") %>
+    </body>   
+    <script>
+      const submit = document.getElementById('donatebutton');
+      const inp = document.getElementById('donate');
+      const thanks = document.getElementById('Thanks');
+      submit.addEventListener('click',()=>{
+      submit.style.visibility = 'hidden';
+      inp.style.visibility = 'hidden';
+      thanks.removeAttribute("hidden");
+      })
+    </script>
+</html>
